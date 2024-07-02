@@ -1,0 +1,18 @@
+version: '3.8'
+services:
+  attacked_server:
+    build: ./attacked_server
+    ports:
+      - "3000:3000"
+
+  reverse_proxy:
+    build: ./reverse_proxy
+    ports:
+      - "3001:3001"
+    depends_on:
+      - attacked_server
+
+  attacker:
+    build: ./attacker
+    depends_on:
+      - reverse_proxy
