@@ -1,0 +1,25 @@
+In VSCODE:
+1) Terminal #1 - docker-compose up --build 														#compose the containers
+2) Terminal #2 - docker exec -it cyber_proj-attacked_server-1 tcpdump -i any -w /tmp/packets_attacked_server.pcap			#run tcpdump listener in server
+3) Terminal #3 - docker exec -it cyber_proj-reverse_proxy-1 tcpdump -i any -w /tmp/packets_proxy.pcap					#run tcpdump listener in proxy
+4) Terminal #4 - docker exec -it cyber_proj-attacker-1 tcpdump -i any -w /tmp/packets_attacker.pcap					#run tcpdump listener in attacker
+5) Terminal 5# 
+	- docker exec -it cyber_proj-attacker-1 /bin/bash												#open attacker shell
+	- python attack.py																	#run attack
+	
+	***wait for response before step 6**
+6) Terminal #2 - ctrl + c																	#stop listener
+7) Terminal #3 - ctrl + c																	#stop listener
+8) Terminal #4 - ctrl + c																	#stop listener
+9) ***optional*** 
+	- Terminal #6: inspct file content before importing to host:
+		- docker exec -it cyber_proj-attacked_server-1 tcpdump -r /tmp/packets_attacked_server.pcap
+		- docker exec -it cyber_proj-reverse_proxy-1 tcpdump -r /tmp/packets_proxy.pcap
+		- docker exec -it cyber_proj-attacker-1 tcpdump -r /tmp/packets_attacker.pcap
+10) Terminal #6 - 
+	- docker cp cyber_proj-attacked_server-1:/tmp/packets_attacked_server.pcap ./packets_attacked_server.pcap	#import file to host
+	- docker cp cyber_proj-attacker-1:/tmp/packets_attacker.pcap ./packets_attacker.pcap				#import file to host
+	- docker cp cyber_proj-attacker-1:/tmp/packets_attacker.pcap ./packets_attacker.pcap
+
+In WIRESHARK
+1) file -> open file generated
