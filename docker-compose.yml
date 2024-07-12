@@ -4,15 +4,23 @@ services:
     build: ./attacked_server
     ports:
       - "3000:3000"
+    volumes:
+      - ./attacked_server:/usr/src/app
 
   reverse_proxy:
     build: ./reverse_proxy
     ports:
       - "3001:3001"
+    volumes:
+      - ./reverse_proxy:/usr/src/app
     depends_on:
       - attacked_server
 
   attacker:
     build: ./attacker
+    stdin_open: true   # Enable stdin open for interactive use
+    tty: true          # Allocate a pseudo-TTY for interaction
+    volumes:
+      - ./attacker:/usr/src/app
     depends_on:
       - reverse_proxy
