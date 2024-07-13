@@ -1,7 +1,9 @@
 const express = require('express');
 const morgan = require('morgan');
-const app = express();
+const https = require('https');
+const fs = require('fs');
 
+const app = express();
 app.use(morgan('combined'));
 
 // Set the timeout for the server to a high value (e.g., 10 minutes)
@@ -32,25 +34,23 @@ app.use((req, res, next) => {
   next();
 });
 
-// Debugging middleware to log raw incoming requests
-app.use((req, res, next) => {
-  console.log('Raw request:', req.rawHeaders);
-  next();
-});
-
 app.get('/', (req, res) => {
   res.send('Hello, world!');
 });
 
+// Read SSL certificate and key files
+const options = {
+  key: fs.readFileSync('./server.key'),
+  cert: fs.readFileSync('./server.cert')
+};
+
 const PORT = 3000;
-const server = app.listen(PORT, () => {
+const server = https.createServer(options, app).listen(PORT, () => {
   console.log(`Attacked server is running on port ${PORT}`);
 });
 
-// Set the timeout for the server
 server.setTimeout(serverTimeout);
 
-// Add a connection event to log all connections
 server.on('connection', (socket) => {
   console.log('New connection from:', socket.remoteAddress);
   socket.on('data', (chunk) => {

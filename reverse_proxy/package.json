@@ -5,12 +5,16 @@
   "main": "proxy.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node proxy.js"
+    "start": "node proxy.js",
+    "dev": "nodemon proxy.js"
   },
   "author": "",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
     "http-proxy-middleware": "^3.0.0"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.4"
   }
 }
