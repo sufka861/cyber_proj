@@ -1,8 +1,8 @@
 In VSCODE:
 1) Terminal #1 - docker-compose up --build 														#compose the containers
-2) Terminal #2 - docker exec -it cyber_proj-attacked_server-1 tcpdump -i any -w /tmp/packets_attacked_server.pcap			#run tcpdump listener in server
-3) Terminal #3 - docker exec -it cyber_proj-reverse_proxy-1 tcpdump -i any -w /tmp/packets_proxy.pcap					#run tcpdump listener in proxy
-4) Terminal #4 - docker exec -it cyber_proj-attacker-1 tcpdump -i any -w /tmp/packets_attacker.pcap					#run tcpdump listener in attacker
+2) Terminal #2 - docker exec -it cyber_proj1-attacked_server-1 tcpdump -i any -w /tmp/packets_attacked_server.pcap			#run tcpdump listener in server
+3) Terminal #3 - docker exec -it cyber_proj1-reverse_proxy-1 tcpdump -i any -w /tmp/packets_proxy.pcap					#run tcpdump listener in proxy
+4) Terminal #4 - docker exec -it cyber_proj1-attacker-1 tcpdump -i any -w /tmp/packets_attacker.pcap					#run tcpdump listener in attacker
 5) Terminal 5# 
 	- docker exec -it cyber_proj-attacker-1 /bin/bash												#open attacker shell
 	- python attack.py																	#run attack
