@@ -4,9 +4,9 @@ import time
 
 # Target details
 # target_host = 'reverse_proxy'
-# target_port = 3000
+# target_port = 3001
 target_host = 'attacked_server'
-target_port = 3001
+target_port = 3000
 
 # Slowloris parameters
 num_sockets = 100
